@@ -1,38 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Middleware;
 
-use App\Http\Controllers\Controller;
 use App\Support\PanelResolver;
-use Illuminate\Http\RedirectResponse;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class AuthController extends Controller
+class EnsurePanelRole
 {
     /**
-     * Redirect authenticated user to their panel.
-     * Useful for guard-based redirects (e.g. after middleware passes).
+     * Handle an incoming request.
+     *
+     * Verifies that the authenticated user's role matches
+     * the panel they are trying to access. If not, redirects
+     * them to their own panel or back to login.
      */
-    public function dashboard(): RedirectResponse
+    public function handle(Request $request, Closure $next): Response
     {
         if (! Auth::check()) {
             return redirect()->route('login');
         }
 
-        return redirect()->to(PanelResolver::redirectUrl(Auth::user()));
-    }
+        $requiredRole = PanelResolver::roleForPath($request->path());
 
-    /**
-     * Log the user out and clear session.
-     */
-    public function logout(Request $request): RedirectResponse
-    {
-        Auth::logout();
+        // Path is not a known panel — allow through
+        if ($requiredRole === null) {
+            return $next($request);
+        }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        return redirect()->route('login');
+        // super_admin can access all panels
+        if (! PanelResolver::canAccess($user, PanelResolver::roleForPath($request->path()) ?? '')) {
+            return redirect()->to(PanelResolver::redirectUrl($user));
+        }
+
+        return $next($request);
     }
 }
