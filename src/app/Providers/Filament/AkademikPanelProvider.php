@@ -6,6 +6,8 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -25,6 +27,10 @@ class AkademikPanelProvider extends PanelProvider
         return $panel
             ->id('akademik')
             ->path('adm')
+            ->login(false)
+            ->spa()
+            ->passwordReset()
+            ->registration()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -33,10 +39,21 @@ class AkademikPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->resources([
+                \App\Filament\Admin\Resources\StudentResource::class,
+                \App\Filament\Admin\Resources\TeacherResource::class,
+                \App\Filament\Admin\Resources\OrtuResource::class,
+            ])
             ->discoverWidgets(in: app_path('Filament/Akademik/Widgets'), for: 'App\\Filament\\Akademik\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Akademik'),
+                NavigationGroup::make()
+                    ->label('Administration'),
             ])
             ->middleware([
                 EncryptCookies::class,
