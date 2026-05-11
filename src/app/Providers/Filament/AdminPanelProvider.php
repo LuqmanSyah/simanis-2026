@@ -53,6 +53,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
+                    ->label('Sistem Penjualan'),
+                NavigationGroup::make()
+                    ->label('Sistem Perpustakaan'),
+                NavigationGroup::make()
+                    ->label('Sistem RS'),
+                NavigationGroup::make()
                     ->label('Akademik'),
                 NavigationGroup::make()
                     ->label('Administration'),
