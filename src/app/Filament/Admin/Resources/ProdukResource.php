@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources;
 
+use App\Filament\Admin\Resources\ProdukResource\Api\Transformers\ProdukTransformer;
 use App\Filament\Admin\Resources\ProdukResource\Pages;
 use App\Filament\Admin\Resources\ProdukResource\RelationManagers;
 use App\Models\Produk;
@@ -87,5 +88,10 @@ class ProdukResource extends Resource
             'create' => Pages\CreateProduk::route('/create'),
             'edit' => Pages\EditProduk::route('/{record}/edit'),
         ];
+    }
+
+    public static function getApiTransformer(): string
+    {
+        return ProdukTransformer::class;
     }
 }

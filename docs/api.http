@@ -1,0 +1,64 @@
+@baseUrl = https://simanis-2026.test
+@token = 2|xZ0yD6O6WJAo8vMlrXpjCMfbkQhMbChqxZcpLKYL46a90dc7
+
+### POST AUTH
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "password": "password"
+}
+
+###
+
+### List semua buku
+GET {{baseUrl}}/api/admin/bukus
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### Tambah buku
+POST {{baseUrl}}/api/admin/bukus
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "judul": "Pemrograman Laravel",
+  "pengarang": "Taylor Otwell",
+  "tahun_terbit": 2023,
+  "stok": 5
+}
+
+###
+
+### Detail buku
+GET {{baseUrl}}/api/admin/bukus/1
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### Update buku
+PUT {{baseUrl}}/api/admin/bukus/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "judul": "Buku 1",
+    "pengarang": "Adit",
+    "tahun_terbit": 2000,
+    "stok": 10
+}
+
+###
+
+### Hapus buku
+DELETE {{baseUrl}}/api/admin/bukus/1
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
