@@ -3,20 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Support\PanelResolver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory,HasRoles, Notifiable, HasApiTokens;
+    use HasFactory,HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -66,18 +64,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return PanelResolver::canAccess($this, $panel->getId());
-    }
-
-    /** Only super_admin can impersonate others */
-    public function canImpersonate(): bool
-    {
-        return $this->hasRole('super_admin');
-    }
-
-    /** Prevent impersonating another super_admin */
-    public function canBeImpersonated(): bool
-    {
-        return ! $this->hasRole('super_admin');
+        return true;
     }
 }

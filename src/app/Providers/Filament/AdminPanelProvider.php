@@ -21,7 +21,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-use Rupadana\ApiService\ApiServicePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -32,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->spa()
-            ->login(false)
+            ->login()
             ->passwordReset()
             ->profile(\App\Filament\Pages\Auth\EditProfile::class, isSimple: false)
             ->defaultThemeMode(ThemeMode::Light)
@@ -54,14 +53,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Sistem Penjualan'),
-                NavigationGroup::make()
-                    ->label('Sistem Perpustakaan'),
-                NavigationGroup::make()
-                    ->label('Sistem RS'),
-                NavigationGroup::make()
-                    ->label('Akademik'),
-                NavigationGroup::make()
                     ->label('Administration'),
             ])
             ->userMenuItems([
@@ -74,7 +65,6 @@ class AdminPanelProvider extends PanelProvider
                 //     ->icon('heroicon-m-user-circle'),
             ])
             ->plugins([
-                ApiServicePlugin::make(),
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
                     ->gridColumns([
                         'default' => 2,
